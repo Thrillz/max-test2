@@ -20,12 +20,15 @@ export class AppComponent implements OnInit {
 
   pickup: object;
 
-  service_id: string = "5838ffef - de7a - 4593 - 86fb - 7bda18b9667a"
+  service_id: string = "e6f9a0b7-8f03-431f-a3da-7fbc914bbb72"
 
   priceForm: FormGroup;
 
   pickupError = '';
   deliveryError = '';
+  errorMessage = '';
+
+  deliveryFee: number;
 
   @ViewChild("search")
   public searchElementRef: ElementRef;
@@ -40,6 +43,8 @@ export class AppComponent implements OnInit {
     //set google maps defaults
     this.latitude = 39.8282;
     this.longitude = -98.5795;
+
+    this.deliveryFee = 0.00;
 
     // build the data model for our signIn form
     this.buildPriceForm();
@@ -56,6 +61,7 @@ export class AppComponent implements OnInit {
         types: ["address"],
         componentRestrictions: {country: "ng"}
       });
+
       autocomplete.addListener("place_changed", () => {
         this.ngZone.run(() => {
           //get the place result
@@ -71,10 +77,9 @@ export class AppComponent implements OnInit {
           this.longitude = place.geometry.location.lng();
 
           return this.pickup = {
-            "pickup":
-            {"lat": this.latitude,
-            "lng": this.longitude}
-          };
+            lat: this.latitude,
+            lng: this.longitude
+          }
         });
       });
 
@@ -98,9 +103,8 @@ export class AppComponent implements OnInit {
           this.longitude2 = place2.geometry.location.lng();
 
           return this.delivery = {
-            "delivery":
-            {"lat": this.latitude2,
-            "lng": this.longitude2}
+            lat: this.latitude2,
+            lng: this.longitude2
           };
         });
       });
@@ -151,8 +155,30 @@ export class AppComponent implements OnInit {
 
   getPrice() {
     console.log("haha");
-    console.log(this.pickup, this.delivery, this.service_id);
-    this.userService.getPrice(this.pickup, this.delivery, this.service_id)
-    .subscribe(res => console.log(res));
+    this.errorMessage = '';
+    const requestBody = {
+      delivery: this.delivery,
+      pickup: this.pickup,
+      service_id: this.service_id
+    }
+    this.userService.getPrice(requestBody)
+    .subscribe(
+      data => {
+      this.deliveryFee = data.delivery_fee;
+      console.log(this.deliveryFee)
+    },
+      err => {
+        this.errorMessage = err.message;
+        console.log(err.message);
+        this.clearMessages();
+      }
+    );
+  }
+
+  // clearmessage class to remove messages (error)
+  clearMessages() {
+    setTimeout(() =>{
+      this.errorMessage = '';
+    }, 10000);
   }
 }

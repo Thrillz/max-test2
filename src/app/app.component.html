@@ -2,7 +2,7 @@
   <div class="Price">
     <h1 class="text-center">
       <span class="currency">₦</span>
-      <span class="value">0.00</span>
+      <span class="value">{{ deliveryFee }}.00</span>
     </h1>
   </div>
 
@@ -20,6 +20,10 @@
 
     <div class="footer text-center">
       <button type="submit" class="btn btn-lg btn-primary" [disabled]="priceForm.invalid">Get Pricing</button>
+    </div>
+
+    <div *ngIf="errorMessage" class="alert alert-danger">
+      {{ errorMessage }}
     </div>
 
   </form>

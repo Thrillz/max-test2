@@ -12,11 +12,9 @@ export class UserService {
   constructor(private http: Http) { }
 
   //get user price
-  getPrice(pickup, delivery, service_id): Observable<any> {
-    // let pickup = JSON.stringify(pick);
-    // let delivery = JSON.stringify(deliver);
-    console.log(pickup, delivery, service_id);
-    return this.http.post(`${this.baseUrl}/v1/pricings/estimate`, {pickup, delivery, service_id})
+  getPrice(body: Object): Observable<any> {
+    console.log(body);
+    return this.http.post(`${this.baseUrl}/v1/pricings/estimate`, body)
     .map(res => res.json().data)
     .catch(this.handleError);
   }
