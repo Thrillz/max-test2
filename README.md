@@ -26,3 +26,6 @@ Before running the tests make sure you are serving the app via `ng serve`.
 ## Further help
 
 To get more help on the Angular CLI use `ng help` or go check out the [Angular CLI README](https://github.com/angular/angular-cli/blob/master/README.md).
+
+
+This is an average price calculator for short distances traveled using the max delivery API and Google autocomplete API. The code might not be pretty but it is readable, maintainable and scalable. I did as a test for Max Ng.
